@@ -1,0 +1,54 @@
+
+[
+  { "name": "Livin' on a Prayer", 
+    "artist": "Bon Jovi", 
+    "year": 1986, 
+    "genre": "Rock" 
+  }, 
+  { "name": "Pour Some Sugar on Me", 
+    "artist": "Def Leppard", 
+    "year": 1987, 
+    "genre": "Rock" 
+  },  
+  { "name": "Highway to Hell", 
+    "artist": "ACDC", 
+    "year": 1979, 
+    "genre": "Rock" 
+  },
+  { "name": "Rapper's Delight", 
+    "artist": "Sugarhill Gang", 
+    "year": 1980, 
+    "genre": "Classic HipHop" 
+  },
+  { "name": "Girls", 
+    "artist": "Beastie Boys", 
+    "year": 1986, 
+    "genre": "Classic HipHop" 
+  },
+  { "name": "Insane in the Membrane", 
+    "artist": "Cypress Hill", 
+    "year": 1993, 
+    "genre": "Classic HipHop" 
+  },
+  { "name": "Fair Trade", 
+    "artist": "Drake", 
+    "year": 2021, 
+    "genre": "Rap" 
+  },
+  { "name": "Stir Fry", 
+    "artist": "Migos", 
+    "year": 2017, 
+    "genre": "Rap" 
+  },
+  { "name": "High Fashion", 
+    "artist": "Roddy Rich", 
+    "year": 2019, 
+    "genre": "Rap" 
+  },
+  { "name": "Invincible", 
+    "artist": "Pop Smoke", 
+    "year": 2020, 
+    "genre": "Rap"
+  }
+]
+
