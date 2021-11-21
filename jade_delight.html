@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Jade Delight</title>
+	<style>
+		html {
+			background-color: rgb(112, 247, 247); 
+			color: rgb(247, 2, 247);
+			text-align: center;
+		}
+		form {
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 20px;
+			border: 3px solid rgb(247, 2, 247); 
+			padding: 0px 10px 15px 15px; 
+			max-width: 600px;
+		}
+	</style>
+</head>
+
+<body>
+	<script language="javascript">
+
+	function MenuItem(name, cost)
+	{
+		this.name = name;
+		this.cost = cost;
+	}
+
+	menuItems = new Array(
+		new MenuItem("Chicken Chop Suey", 4.5),
+		new MenuItem("Sweet and Sour Pork", 6.25),
+		new MenuItem("Shrimp Lo Mein", 5.25),
+		new MenuItem("Moo Shi Chicken", 6.5),
+		new MenuItem("Fried Rice", 2.35)
+	);
+
+	function makeSelect(name, minRange, maxRange)
+	{
+		var t = "";
+		t = "<select name='" + name + "' size='1'>";
+		for (j=minRange; j<=maxRange; j++)
+		t += "<option>" + j + "</option>";
+		t += "</select>"; 
+		return t;
+	}
+	</script>
+
+	<h1>Jade Delight</h1>
+
+	<form>
+		<p>First Name: <input type="text"  name='fname' /></p>
+		<p>Last Name*:  <input type="text"  name='lname' /></p>
+		<p>Street: <input type="text"  name='street' /></p>
+		<p>City: <input type="text"  name='city' /></p>
+		<p>Phone*: <input type="text"  name='phone' /></p>
+		<p> 
+			<input type="radio"  name="p_or_d" value = "pickup" checked="checked"/>Pickup  
+			<input type="radio"  name='p_or_d' value = 'delivery'/>
+			Delivery
+		</p>
+		<table border="0" cellpadding="3">
+  			<tr>
+    			<th>Select Item</th>
+    			<th>Item Name</th>
+    			<th>Cost Each</th>
+    			<th>Total Cost</th>
+  			</tr>
+	
+			<script language="javascript">
+				var s = "";
+  				for (i=0; i< menuItems.length; i++)
+  				{
+					s += "<tr><td>";
+					s += makeSelect("quan" + i, 0, 10);
+					s += "</td><td>" + menuItems[i].name + "</td>";
+					s += "<td> $ " + menuItems[i].cost.toFixed(2) + "</td>";
+					s += "<td>$<input type='text' name='cost'/></td></tr>";
+  				}
+  				document.writeln(s);
+			</script>
+		</table>
+
+		<p>Subtotal: 
+   			$<input type="text"  name='subtotal' id="subtotal" />
+		</p>
+		<p>
+			Mass tax 6.25%:
+  			$ <input type="text"  name='tax' id="tax" />
+		</p>
+		<p>
+			Total: $ <input type="text"  name='total' id="total" />
+		</p>
+		<input type ="button" value ="Submit Order" onclick="display();"/>
+	</form>
+
+	<script language="javascript">
+		//get vals stored in form
+		var vals = document.getElementsByTagName("table")[0].rows;
+		var m1 = document.getElementsByName('quan0')[0];
+		var m2 = document.getElementsByName('quan1')[0];
+		var m3 = document.getElementsByName('quan2')[0];
+		var m4 = document.getElementsByName('quan3')[0];
+		var m5 = document.getElementsByName('quan4')[0];
+		var delivery = false;
+		var orderType = document.querySelectorAll("input[name='p_or_d']");
+		var submit = document.querySelector("input[type='submit']");
+		var pickup = document.getElementsByTagName('p');
+		var total = 0;
+		pickup[2].style.display = 'none';
+		pickup[3].style.display = 'none';
+		orderType[0].onchange = isPickup;
+		orderType[1].onchange = isPickup;
+	
+		//get order + quantity and calculate for each
+		m1.onchange = function() {
+			vals[1].lastChild.lastChild.value = (m1.value * menuItems[0].cost).toFixed(2);
+			getTotal(); //update the sum
+		}
+		m2.onchange = function() {
+			vals[2].lastChild.lastChild.value = (m2.value * menuItems[1].cost).toFixed(2);
+			getTotal();
+		}
+		
+		m3.onchange = function() {
+			vals[3].lastChild.lastChild.value = (m3.value * menuItems[2].cost).toFixed(2);
+			getTotal();
+		}
+		
+		m4.onchange = function() {
+			vals[4].lastChild.lastChild.value = (m4.value * menuItems[3].cost).toFixed(2);
+			getTotal();
+		}
+		m5.onchange = function() {
+			vals[5].lastChild.lastChild.value = (m5.value * menuItems[4].cost).toFixed(2);
+			getTotal();
+		}
+
+		// check if it is pickup or delivery  
+		function isPickup() {
+			if (orderType[0].checked) {
+				delivery = false;
+				pickup[2].style.display = 'none';
+				pickup[3].style.display = 'none';
+			}
+			else {
+				delivery = true;
+				pickup[2].style.display = 'block';
+				pickup[3].style.display = 'block';
+			}
+		}
+	
+	   // calculate total sum, including Mass tax
+		function getTotal() {
+			var sum = 0
+			for (var i = 1; i < vals.length; i++) {
+				var num = vals[i].lastChild.lastChild.value
+				var price = parseFloat(num)
+				if (price) {
+					sum += price;
+				} else {
+					sum += 0;
+				}
+			}
+			// only want 2 decimal places 
+			document.getElementById('subtotal').value = sum.toFixed(2)
+			document.getElementById('tax').value = (sum * .0625).toFixed(2)
+			document.getElementById('total').value = (sum * 1.0625).toFixed(2)
+			total = (sum * 1.0625)
+		}
+	
+		// check that all delivery input fields are filled 
+		function displayDelivery(){
+			if (delivery) {
+				if (!document.getElementsByName('street')[0].value) {
+					alert("Please enter a street address")
+					return false
+				}
+				if (!document.getElementsByName('city')[0].value) {
+					alert("Please enter a city")
+					return false
+				}
+			}
+		}
+
+		// display the order on the screen for the user 
+		function displayOrder(){
+			document.write("<h1>Thank you for your order!</h1>")
+			var order = "Order Summary:<br>" + 
+						(m1.value ? m1.value + " Chicken Chop Suey<br>" : "") 
+						+ (m2.value ? m2.value + " Sweet and Sour Pork<br>" : "") 
+						+ (m3.value ? m3.value + " Shrimp Lo Mein<br>" : "") 
+						+ (m4.value ? m4.value + " Moo Shi Chicken<br>" : "") 
+						+ (m5.value ? m5.value + " Fried Rice<br>" : "")
+			document.write(order)
+			document.write("<p>Total: $" + total.toFixed(2) + "</p>")
+	
+			var time = new Date()
+			if (delivery) {
+				time.setMinutes(time.getMinutes() + 30);
+				document.write("Delivery time: " + time);
+			}
+			else {
+				time.setMinutes(time.getMinutes() + 15);
+				document.write("Pickup time: " + time);
+			}
+		}
+
+		// display both order and delivery (call those functions) error messages (if necessary)
+		function display() {
+			if (!document.getElementsByName("lname")[0].value) {
+				alert("Please enter a last name.")
+				return false
+			}
+			if (!document.getElementsByName("phone")[0].value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)){
+				alert("Please enter a valid phone number.")
+				return false
+			}
+			if(total == 0){
+				alert("You must order at least one item.")
+				return false
+			}
+			displayDelivery();
+			displayOrder();
+		}
+
+	</script>
+</body>
+</html>
