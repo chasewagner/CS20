@@ -15,40 +15,35 @@
                 font-family: 'Courier New', Courier, monospace;
                 text-align: center;
                 font-size: 25px; 
-             }
-            button, input {
+            }
+            button, input, p {
                 font-family: 'Courier New', Courier, monospace;
                 color: rgb(247, 43, 230);
                 font-size: 18px;
             }
         </style>
 
-        <script language="javascript">
+        <script>
             function getData() {
                 state = document.getElementById("state_name").value; 
                 console.log(state); 
                 request = new XMLHttpRequest(); 
                 request.open("GET", "https://api.covidtracking.com/v1/states/" + state + "/current.json", true);
-                // request.setRequestHeader("Access-Control-Allow-Origin", "*");
 
                 request.onreadystatechange = function() {
+                    console.log(request.readyState); 
                     console.log(request.status); 
-                    if (request.readystate == 4 && request.status == 200) {
-                        console.log('in if\n'); 
+                    if (request.readyState == 4 && request.status == 200) {
                         var data = request.responseText; 
-                        var obj= JSON.parse(data); 
-                        document.getElementById("display").innerHTML = "";
-                        for (i in obj) {
-                            document.getElementById("display").innerHTML += obj[i];
-                        } 
+                        var obj = JSON.stringify(data); 
+                        console.log(obj); 
+                        document.getElementById("display").innerHTML = obj; 
                     } 
-                    // request status seems to be 0 and i dont know why 
-                    else if (request.readyState == 4 && request.status != 200) {
+                    else if (this.readyState == 4 && this.status != 200) {
                         alert('Please enter state again.'); 
                     }
                 }; 
-                console.log('before send request\n'); 
-                request.send("id:101"); 
+                request.send(); 
             }
 
         </script>
@@ -74,7 +69,7 @@
 
         <br><br> 
 
-        <div id="submit">
+        <div>
             <input type="text" name="state_name" id="state_name" placeholder="State abbreviation"> 
             <br><br> 
             <button type="submit" onclick="getData()">Generate!</button>  
@@ -82,7 +77,7 @@
 
         <br><br> 
 
-        <div id="display">&nbsp;</div>
+        <p id="display">&nbsp;</p>
 
     </body>
 
