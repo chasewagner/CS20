@@ -2,8 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>HW9 - JSON Song List</title> 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>HW10 - API Fun!</title> 
         <style> 
             body {
                 background-color: rgb(136, 248, 248);
@@ -16,69 +16,74 @@
                 text-align: center;
                 font-size: 25px; 
              }
-            /* h2 {
-                color: rgb(247, 43, 230);
-                font-family: 'Courier New', Courier, monospace;
-                text-align: center;
-                font-size: 20px; 
-            }
-            ul li {
-                list-style-type: none;
-            } */
-            button {
+            button, input {
                 font-family: 'Courier New', Courier, monospace;
                 color: rgb(247, 43, 230);
                 font-size: 18px;
             }
         </style>
+
+        <script language="javascript">
+            function getData() {
+                state = document.getElementById("state_name").value; 
+                console.log(state); 
+                request = new XMLHttpRequest(); 
+                request.open("GET", "https://api.covidtracking.com/v1/states/" + state + "/current.json", true);
+                // request.setRequestHeader("Access-Control-Allow-Origin", "*");
+
+                request.onreadystatechange = function() {
+                    console.log(request.status); 
+                    if (request.readystate == 4 && request.status == 200) {
+                        console.log('in if\n'); 
+                        var data = request.responseText; 
+                        var obj= JSON.parse(data); 
+                        document.getElementById("display").innerHTML = "";
+                        for (i in obj) {
+                            document.getElementById("display").innerHTML += obj[i];
+                        } 
+                    } 
+                    // request status seems to be 0 and i dont know why 
+                    else if (request.readyState == 4 && request.status != 200) {
+                        alert('Please enter state again.'); 
+                    }
+                }; 
+                console.log('before send request\n'); 
+                request.send("id:101"); 
+            }
+
+        </script>
+
     </head>
+
     <body>
-        <h1>Dog Fact Generator</h1>
+        <h1>COVID-19 DATA</h1>
 
         <div id="info">
-            The API I selected generates random facts about dogs. 
+            The API I selected generates COVID-19 data for a given state that the user inputs. 
             <br><br> 
             It is a public API that is accessible on GitHub. 
             <br><br> 
-            The two options I used for the API request were ... 
+            I used an XMLHttpRequest to get the information with a GET request. I asked the user 
+            to input a state (using its abbreviation), and added that to the url to get the 
+            appropriate JSON object.  
             <br><br> 
-            This API would be helpful in ... 
+            This API is very helpful, given the current state of our world. COVID is extremely serious, 
+            and information like this helps us understand the gravity of the situation. It also helps 
+            us keep ourselves and those around us safe. 
         </div>
+
         <br><br> 
+
         <div id="submit">
-            <!-- need to fill the onclick portion!!!! -->
-            <button type="button" onclick="main();">Generate!</button>  
+            <input type="text" name="state_name" id="state_name" placeholder="State abbreviation"> 
+            <br><br> 
+            <button type="submit" onclick="getData()">Generate!</button>  
         </div>
+
+        <br><br> 
+
         <div id="display">&nbsp;</div>
 
-        <script language="javascript">
-            function main() {
-                requestData();
-                getData(); 
-            }
-            function requestData() {
-                var xhttp = new XMLHttpRequest(); 
-                if (!xhttp) {
-                    alert("Unable to complete HTTPRequest object."); 
-                    return; 
-                }
-                var data = "id:101";
-                xhttp.open("GET", "https://dog-facts-api.herokuapp.com/api/v1/resources/dogs/", true); 
-                xhttp.onreadystatechange = getData(); 
-                // xhttp.open("GET", "https://dog-facts-api.herokuapp.com/api/v1/resources/dogs/all", true); 
-                xhttp.send(xhttp); 
-            }
-            function getData() {
-                if (this.readystate == 4 && this.status == 200) {
-                    var data = this.responseText; 
-                    var info = JSON.parse(data); 
-                    var str = ";"
-                    for (var i = 0; i < info.length; i++) {
-                        str += info[i]; 
-                    }
-                    document.getElementById("display").innerHTML = str; 
-                }
-            }
-        </script>
     </body>
+
 </html>
